@@ -38,7 +38,7 @@ public class RandomUtil {
 
 	
 	public static AIWPosition getPosition(double worldSize) {
-		AIWPosition result = new AIWPosition(getDouble(0, worldSize), getDouble(0, worldSize), getDouble(-Math.PI, Math.PI));
+		AIWPosition result = new AIWPosition(getDouble(0, worldSize), getDouble(0, worldSize), getDouble(-AIWPosition.RAD_180, AIWPosition.RAD_180));
 		result.normalizePos(worldSize);
 		return result;
 	}

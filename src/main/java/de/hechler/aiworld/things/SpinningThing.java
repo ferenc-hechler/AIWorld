@@ -16,30 +16,28 @@ public class SpinningThing extends BaseThing {
 	private double turn;
 	
 	public SpinningThing(AIWorld world, AIWPosition pos) {
-		super(world, pos, ThingType.ANYTHING);
-		this.speed = RandomUtil.getDouble(0.1, 10);
-		this.turn = RandomUtil.getDouble(-0.5, 0.5);
+		super(world, pos, ThingType.THING);
+		this.speed = RandomUtil.getDouble(0.1, 1);
+		this.turn = RandomUtil.getDouble(-0.05, 0.05);
 	}
 	
 	@Override
 	public void tick() {
-		rotate();		
-		moveForward();
+		rotate(turn);		
+		moveForward(1);
 	}
 
-	
-	private void rotate() {
-		pos.turn(turn);
-	}
 
-	private void moveForward() {
-		pos.forward(speed);
-		pos.normalizePos(world.getWorldSize());
-	}
-	
 	@Override
 	public void addVisibleState(List<VisibleObject> out) {
 		out.add(new VisibleObject(getPosition(), new AIWShape(ShapeType.DOT), new AIWColor(0,255,0)));
 	}
 
+	@Override
+	public String toString() {
+		return "SpinningThing [pos=" + getPosition() + ", speed=" + speed + ", turn=" + turn + "]";
+	}
+
+	
+	
 }

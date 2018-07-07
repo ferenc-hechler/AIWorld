@@ -14,6 +14,16 @@ Things can reproduce themselves.
 
 All things in the World act synchronously during a tick() 
 
+# SENSORS
+
+* look
+* detect nearby things
+
+# MEMORY
+
+* remember-storage
+
+
 # TODO
 
 The following issues have to be defines

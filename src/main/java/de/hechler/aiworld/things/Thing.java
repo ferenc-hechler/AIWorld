@@ -17,5 +17,7 @@ public interface Thing {
 	AIWPosition getPosition();
 
 	void addVisibleState(List<VisibleObject> out);
-
+	
+	boolean checkCollision(double minX, double minY, double maxX, double maxY);
+	
 }

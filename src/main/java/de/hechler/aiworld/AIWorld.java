@@ -2,9 +2,10 @@ package de.hechler.aiworld;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import de.hechler.aiworld.core.AIWPosition;
 import de.hechler.aiworld.core.VisibleObject;
-import de.hechler.aiworld.things.SimplyMovingThing;
 import de.hechler.aiworld.things.Thing;
 
 public class AIWorld {
@@ -58,6 +59,39 @@ public class AIWorld {
 
 	public double getWorldSize() {
 		return worldSize;
+	}
+
+
+	public boolean moveForward(Thing thing, double dist) {
+		AIWPosition newPos = thing.getPosition().createCopy();
+		newPos.forward(dist);
+		newPos.normalizePos(worldSize);
+		if (checkCollision(thing, newPos)) {
+			return false;
+		}
+		thing.getPosition().set(newPos);
+		return true;
+	}
+
+
+	private boolean checkCollision(Thing movingThing, AIWPosition newPos) {
+		double minX = newPos.getX()-1.0;
+		double minY = newPos.getY()-1.0;
+		double maxX = minX + 2.0;
+		double maxY = minY + 2.0;
+		List<Thing> collidingThings = findThings(minX, minY, maxX, maxY);
+		if (collidingThings.isEmpty()) {
+			return false;
+		}
+		if (collidingThings.size() > 1) {
+			return true;
+		}
+		return collidingThings.get(0) != movingThing;
+	}
+
+
+	public List<Thing> findThings(double minX, double minY, double maxX, double maxY) {
+		return things.stream().filter(thing -> thing.checkCollision(minX, minY, maxX, maxY)).collect(Collectors.toList());
 	}
 
 	

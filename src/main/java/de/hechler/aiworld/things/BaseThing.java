@@ -5,11 +5,11 @@ import de.hechler.aiworld.core.AIWPosition;
 
 public abstract class BaseThing implements Thing {
 
-	protected AIWorld world;
+	private AIWorld world;
 	
-	protected AIWPosition pos;
+	private AIWPosition pos;
 
-	protected ThingType type;
+	private ThingType type;
 	
 	public BaseThing(AIWorld world, AIWPosition pos, ThingType type) {
 		this.world = world;
@@ -32,9 +32,23 @@ public abstract class BaseThing implements Thing {
 		return pos;
 	}
 
+	protected boolean moveForward(double dist) {
+		return world.moveForward(this, dist);
+	}
+	
+	protected void rotate(double rad) {
+		pos.turn(rad);
+	}
+
+	public boolean checkCollision(double minX, double minY, double maxX, double maxY) {
+		// TODO: handle borders (min<0, max>worldsize)
+ 		return pos.checkInside(minX, minY, maxX, maxY);
+	}
+	
+	
 	@Override
 	public String toString() {
-		return "BaseThing [world=" + world + ", pos=" + pos + ", type=" + type + "]";
+		return "THING[pos=" + pos + ", type=" + type + "]";
 	}
 
 

@@ -75,16 +75,16 @@ class AIWPositionTest {
 		AIWPosition pos01 = new AIWPosition(0,1,0);
 		AIWPosition pos11 = new AIWPosition(1,1,0);
 
-		dir = pos00.dir(pos01);
+		dir = pos00.dirTo(pos01);
 		assertEquals(0.0, dir, 0.001);
 
-		dir = pos01.dir(pos11);
+		dir = pos01.dirTo(pos11);
 		assertEquals(Math.PI/2, dir, 0.001);
 		
-		dir = pos11.dir(pos10);
+		dir = pos11.dirTo(pos10);
 		assertEquals(Math.PI, dir, 0.001);
 		
-		dir = pos10.dir(pos00);
+		dir = pos10.dirTo(pos00);
 		assertEquals(-Math.PI/2, dir, 0.001);
 		
 	}

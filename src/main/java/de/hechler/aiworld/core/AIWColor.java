@@ -32,4 +32,9 @@ public class AIWColor {
 		return argb & 0xFF;
 	}
 
+	@Override
+	public String toString() {
+		return "AIWColor [argb=0x" + Integer.toHexString(argb) + "]";
+	}
+
 }

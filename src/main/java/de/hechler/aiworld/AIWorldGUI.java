@@ -2,9 +2,11 @@ package de.hechler.aiworld;
 
 import java.util.List;
 
+import de.hechler.aiworld.core.AIWPosition;
 import de.hechler.aiworld.core.VisibleObject;
 import de.hechler.aiworld.things.SimplyMovingThing;
 import de.hechler.aiworld.things.SpinningThing;
+import de.hechler.aiworld.things.WallThing;
 import de.hechler.aiworld.util.RandomUtil;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -37,6 +39,8 @@ public class AIWorldGUI extends Application {
 
     Canvas canvasOverview;
 
+    private int delay;
+    
 	private Timeline timeline;
 	
     @Override
@@ -48,7 +52,9 @@ public class AIWorldGUI extends Application {
         HBox buttonsPane = new HBox();
 
         Button timerButton = new Button("Run");
+        Button fastButton = new Button("slow");
         Button startButton = new Button("Tick");
+        fastButton.setDisable(true);
         
         timerButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
@@ -57,6 +63,7 @@ public class AIWorldGUI extends Application {
             		timeline = null;
             		timerButton.setText("Run");
             		startButton.setDisable(false);
+                    fastButton.setDisable(true);
             	}
             	else {
 	            	timeline = new Timeline(new KeyFrame(
@@ -66,10 +73,28 @@ public class AIWorldGUI extends Application {
 	            	timeline.play();
             		timerButton.setText("Stop");
             		startButton.setDisable(true);
+                    fastButton.setDisable(false);
             	}                
             }
         });
         buttonsPane.getChildren().add(timerButton);
+
+        delay = 100;
+        fastButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+            	if (timeline != null) {
+            		toggleDelay();
+            		fastButton.setText(getDelayText());
+            		timeline.stop();
+	            	timeline = new Timeline(new KeyFrame(
+	            	        Duration.millis(delay),
+	            	        ae -> tick()));
+	            	timeline.setCycleCount(Animation.INDEFINITE);
+	            	timeline.play();
+            	}
+            }
+        });
+        buttonsPane.getChildren().add(fastButton);
 
         startButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
@@ -90,6 +115,29 @@ public class AIWorldGUI extends Application {
         primaryStage.show();
     }
 
+	private void toggleDelay() {
+		if (delay == 100) {
+			delay = 30;
+		}
+		else if (delay == 30) {
+			delay = 1;
+		}
+		else {
+			delay = 100;
+		}
+	}
+
+	private String getDelayText() {
+		if (delay == 100) {
+			return "slow";
+		}
+		else if (delay == 30) {
+			return "medium";
+		}
+		else {
+			return "fast";
+		}
+	}
 
 
 	private void createWorld() {
@@ -97,6 +145,8 @@ public class AIWorldGUI extends Application {
 		for (int i=0; i<5; i++) {
 			world.add(new SimplyMovingThing(world, RandomUtil.getPosition(WORLD_SIZE)));
 			world.add(new SpinningThing(world, RandomUtil.getPosition(WORLD_SIZE)));
+			world.add(new WallThing(world, RandomUtil.getPosition(WORLD_SIZE).setDir(AIWPosition.RAD_0), RandomUtil.getDouble(WORLD_SIZE/5)));
+			world.add(new WallThing(world, RandomUtil.getPosition(WORLD_SIZE).setDir(AIWPosition.RAD_90), RandomUtil.getDouble(WORLD_SIZE/5)));
 		}
 	}
 
@@ -126,8 +176,6 @@ public class AIWorldGUI extends Application {
 		Color col = Color.rgb(gObj.getCol().getR(), gObj.getCol().getG(), gObj.getCol().getB(), gObj.getCol().getA() * DIV_255);
 		double x = HALF_WORLD_SIZE + gObj.getPos().getX();
 		double y = HALF_WORLD_SIZE + gObj.getPos().getY();
-//		double dir = gObj.getPos().getDir();
-		gObj.getPos().getX();
 		switch(gObj.getShape().getType()) {
 		case PIX: {
 			gc.getPixelWriter().setArgb((int) x, (int) y, gObj.getCol().getArgb());
@@ -137,6 +185,15 @@ public class AIWorldGUI extends Application {
 			gc.setStroke(col);
 			gc.setLineWidth(2.0);
 			gc.strokeRect(x, y, 3, 3);
+			break;
+		}
+		case LINE: {
+			double len = gObj.getShape().getSize();
+			double dx = gObj.getPos().getDX();
+			double dy = gObj.getPos().getDY();
+			gc.setStroke(col);
+			gc.setLineWidth(2.0);
+			gc.strokeRect(x, y, 3+dx*len, 3+dy*len);
 			break;
 		}
 		default:

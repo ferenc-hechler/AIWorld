@@ -32,6 +32,10 @@ public class VisibleObject {
 	public void setCol(AIWColor col) {
 		this.col = col;
 	}
+	@Override
+	public String toString() {
+		return "VisibleObject [pos=" + pos + ", shape=" + shape + ", col=" + col + "]";
+	}
 	
 	
 	
