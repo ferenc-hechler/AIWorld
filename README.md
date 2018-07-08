@@ -2,6 +2,8 @@
 
 Playground for AI-logic in a sandbox like world.
 
+![AI-World GUI](https://raw.githubusercontent.com/ferenc-hechler/AIWorld/master/AIWorldDoc/ai_world_gui.gif)
+
 ## Idea
 
 Allow AI programs (autonomous agents) to live in a sandbox like world.
@@ -35,8 +37,6 @@ Other resources like computation time during a tick() must also be taken into ac
 ## Status
 
 Currently there is not much implemented, just a small world with five moving and five spinning "things".   
-
-![AI-World GUI](https://raw.githubusercontent.com/ferenc-hechler/AIWorld/master/AIWorldDoc/ai_world_gui.gif)
 
 Each thing has a position and a direction into which it "looks", it can move around and turn its direction. 
 
