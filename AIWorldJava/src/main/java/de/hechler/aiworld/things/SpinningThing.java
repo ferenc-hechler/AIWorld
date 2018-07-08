@@ -16,13 +16,16 @@ public class SpinningThing extends BaseThing {
 	private double turn;
 	
 	public SpinningThing(AIWorld world, AIWPosition pos) {
-		super(world, pos, ThingType.THING);
+		super(world, pos, ThingType.THING, 100);
 		this.speed = RandomUtil.getDouble(0.1, 1);
 		this.turn = RandomUtil.getDouble(-0.05, 0.05);
 	}
 	
 	@Override
-	public void tick() {
+	public void tick_alive() {
+		// load battery
+		super.tick_alive();
+		// do move
 		rotate(turn);		
 		moveForward(1);
 	}
@@ -30,12 +33,20 @@ public class SpinningThing extends BaseThing {
 
 	@Override
 	public void addVisibleState(List<VisibleObject> out) {
-		out.add(new VisibleObject(getPosition(), new AIWShape(ShapeType.DOT), new AIWColor(0,255,0)));
+		AIWColor col;
+		if (getEnergy() > 0.5*getMaxEnergy()) {
+			col = new AIWColor(0,0,255);
+		}
+		else {
+			double starveFactor = Math.max(0, 2.0*getEnergy()/getMaxEnergy()); 
+			col = new AIWColor(0,0,(int) (255.0*starveFactor));
+		}
+		out.add(new VisibleObject(getPosition(), new AIWShape(ShapeType.DOT), col));
 	}
 
 	@Override
 	public String toString() {
-		return "SpinningThing [pos=" + getPosition() + ", speed=" + speed + ", turn=" + turn + "]";
+		return "SpinningThing [pos=" + getPosition() + ", energy=" + getEnergy() + ", speed=" + speed + ", turn=" + turn + "]";
 	}
 
 	

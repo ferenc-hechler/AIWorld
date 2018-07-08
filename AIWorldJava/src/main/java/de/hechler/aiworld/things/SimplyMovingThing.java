@@ -13,11 +13,14 @@ import de.hechler.aiworld.util.RandomUtil;
 public class SimplyMovingThing extends BaseThing {
 
 	public SimplyMovingThing(AIWorld world, AIWPosition pos) {
-		super(world, pos, ThingType.THING);
+		super(world, pos, ThingType.THING, 150.0);
 	}
 	
 	@Override
-	public void tick() {
+	public void tick_alive() {
+		// load battery
+		super.tick_alive();
+		// do move
 		boolean moveOK = moveForward(1);
 		if (moveOK) {
 			rotate(RandomUtil.getDouble(-0.1, 0.1));
@@ -29,12 +32,20 @@ public class SimplyMovingThing extends BaseThing {
 	
 	@Override
 	public void addVisibleState(List<VisibleObject> out) {
-		out.add(new VisibleObject(getPosition(), new AIWShape(ShapeType.DOT), new AIWColor(255,0,0)));
+		AIWColor col;
+		if (getEnergy() > 0.5*getMaxEnergy()) {
+			col = new AIWColor(255,0,0);
+		}
+		else {
+			double starveFactor = Math.max(0.0, 2*getEnergy()/getMaxEnergy()); 
+			col = new AIWColor((int) (255.0*starveFactor),0,0);
+		}
+		out.add(new VisibleObject(getPosition(), new AIWShape(ShapeType.DOT), col));
 	}
 
 	@Override
 	public String toString() {
-		return "SimplyMovingThing [pos=" + getPosition() + "]";
+		return "SimplyMovingThing [pos=" + getPosition() + ", energy=" + getEnergy() + "]";
 	}
 
 }

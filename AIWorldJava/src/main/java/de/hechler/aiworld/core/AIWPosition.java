@@ -139,9 +139,7 @@ public class AIWPosition {
 	}
 
 	public double dist(AIWPosition position) {
-		double deltaX = position.getX() - getX();
-		double deltaY = position.getY() - getY();
-		return Math.sqrt(deltaX*deltaX + deltaY*deltaY);
+		return Math.sqrt(sqDist(position));
 	}
 	
 	public double sqDist(AIWPosition position) {
@@ -151,8 +149,8 @@ public class AIWPosition {
 	}
 	
 	public double qDist(AIWPosition position) {
-		double deltaX = position.getX() - getX();
-		double deltaY = position.getY() - getY();
+		double deltaX = Math.abs(position.getX() - getX());
+		double deltaY = Math.abs(position.getY() - getY());
 		return Math.max(deltaX, deltaY);
 	}
 	

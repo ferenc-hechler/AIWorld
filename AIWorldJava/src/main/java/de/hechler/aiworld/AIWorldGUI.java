@@ -4,6 +4,7 @@ import java.util.List;
 
 import de.hechler.aiworld.core.AIWPosition;
 import de.hechler.aiworld.core.VisibleObject;
+import de.hechler.aiworld.things.BatteryThing;
 import de.hechler.aiworld.things.SimplyMovingThing;
 import de.hechler.aiworld.things.SpinningThing;
 import de.hechler.aiworld.things.WallThing;
@@ -141,16 +142,6 @@ public class AIWorldGUI extends Application {
 	}
 
 
-	private void createWorld() {
-		world = new AIWorld(WORLD_SIZE);
-		for (int i=0; i<5; i++) {
-			world.add(new SimplyMovingThing(world, RandomUtil.getPosition(WORLD_SIZE)));
-			world.add(new SpinningThing(world, RandomUtil.getPosition(WORLD_SIZE)));
-			world.add(new WallThing(world, RandomUtil.getPosition(WORLD_SIZE).setDir(AIWPosition.RAD_0), RandomUtil.getDouble(WORLD_SIZE/5)));
-			world.add(new WallThing(world, RandomUtil.getPosition(WORLD_SIZE).setDir(AIWPosition.RAD_90), RandomUtil.getDouble(WORLD_SIZE/5)));
-		}
-	}
-
 
     
 
@@ -201,9 +192,36 @@ public class AIWorldGUI extends Application {
 			gc.strokeRect(x, y, 3+dx*len, 3+dy*len);
 			break;
 		}
+		case SQUARE: {
+			double len = gObj.getShape().getSize();
+			gc.setFill(col);
+			gc.fillRect(x-len, y-len, 2*len, 2*len);
+			break;
+		}
 		default:
 			throw new UnsupportedOperationException("SHAPETYPE '"+gObj.getShape().getType()+"' IS NOT SUPPORTED");
 		}
 	}    
+
+	
+	
+
+	private void createWorld() {
+		world = new AIWorld(WORLD_SIZE);
+		// create background elements (visible, but no collision)
+		for (int i=0; i<2; i++) {
+			world.add(new BatteryThing(world, RandomUtil.getPosition(WORLD_SIZE).setDir(AIWPosition.RAD_0), 10+RandomUtil.getDouble(15)));
+		}
+		// create static elements 
+		for (int i=0; i<5; i++) {
+			world.add(new WallThing(world, RandomUtil.getPosition(WORLD_SIZE).setDir(AIWPosition.RAD_0), RandomUtil.getDouble(WORLD_SIZE/5)));
+			world.add(new WallThing(world, RandomUtil.getPosition(WORLD_SIZE).setDir(AIWPosition.RAD_90), RandomUtil.getDouble(WORLD_SIZE/5)));
+		}
+		// create living elements
+		for (int i=0; i<5; i++) {
+			world.add(new SimplyMovingThing(world, RandomUtil.getPosition(WORLD_SIZE)));
+			world.add(new SpinningThing(world, RandomUtil.getPosition(WORLD_SIZE)));
+		}
+	}
 	
 }

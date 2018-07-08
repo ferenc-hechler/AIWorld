@@ -18,7 +18,7 @@ public class WallThing extends BaseThing {
 	private double toY;
 	
 	public WallThing(AIWorld world, AIWPosition pos, double length) {
-		super(world, pos, ThingType.WALL);
+		super(world, pos, ThingType.WALL, 0);
 		this.length = length;
 		AIWPosition endPos = pos.createCopy();
 		endPos.forward(length);
@@ -34,9 +34,16 @@ public class WallThing extends BaseThing {
 	}
 
 	@Override
-	public void tick() {
-		// walls do not change by time...
+	public boolean isAlive() {
+		return false;
 	}
+	
+	@Override
+	protected void tick_alive() {
+		throw new UnsupportedOperationException(getClass().getName()+" can not live");
+	}
+	
+
 
 	@Override
 	public boolean checkCollision(double minX, double minY, double maxX, double maxY) {
@@ -45,8 +52,8 @@ public class WallThing extends BaseThing {
 
 	@Override
 	public String toString() {
-		return "Wall[length=" + length + ", fromX=" + fromX + ", toX=" + toX + ", fromY=" + fromY + ", toY=" + toY
+		return "WallThing[length=" + length + ", fromX=" + fromX + ", toX=" + toX + ", fromY=" + fromY + ", toY=" + toY
 				+ "]";
 	}
-	
+
 }

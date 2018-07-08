@@ -6,10 +6,12 @@ import java.util.stream.Collectors;
 
 import de.hechler.aiworld.core.AIWPosition;
 import de.hechler.aiworld.core.VisibleObject;
+import de.hechler.aiworld.things.BaseThing;
 import de.hechler.aiworld.things.Thing;
 
 public class AIWorld {
 
+	private static final double VISIBLE_RANGE = 50.0;
 	private int age;
 	private double worldSize;
 	
@@ -33,6 +35,13 @@ public class AIWorld {
 		age = age + 1;
 		for (Thing thing:things) {
 			thing.tick();
+		}
+		for (int i=things.size()-1; i>=0; i--) {
+			Thing thing = things.get(i);
+			if (thing.isAlive() && thing.getEnergy() < 0.0) {
+				thing.die();
+				things.remove(i); 
+			}
 		}
 	}
 
@@ -92,6 +101,26 @@ public class AIWorld {
 
 	public List<Thing> findThings(double minX, double minY, double maxX, double maxY) {
 		return things.stream().filter(thing -> thing.checkCollision(minX, minY, maxX, maxY)).collect(Collectors.toList());
+	}
+
+
+	/**
+	 * return list of things to be seen by lookingThing.
+	 * @param thing
+	 * @return
+	 */
+	public List<Thing> lookNearbyThings(Thing lookingThing) {
+		List<Thing> result = new ArrayList<>();
+		double x = lookingThing.getPosition().getX();
+		double y = lookingThing.getPosition().getY();
+		double visibleRange = VISIBLE_RANGE;
+		double minX = x - visibleRange;
+		double minY = y - visibleRange;
+		double maxX = x + visibleRange;
+		double maxY = y + visibleRange;
+		return things.stream()
+				.filter(thing -> (thing != lookingThing) && thing.checkVisible(minX, minY, maxX, maxY))
+				.collect(Collectors.toList());
 	}
 
 	
