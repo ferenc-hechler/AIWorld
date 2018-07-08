@@ -45,7 +45,7 @@ public class AIWorldGUI extends Application {
 	
     @Override
     public void start(Stage primaryStage) {
-        primaryStage.setTitle("Things That Learn");
+        primaryStage.setTitle("AI-World");
         Group root = new Group();
         canvasOverview = new Canvas(WORLD_SIZE, WORLD_SIZE);
 
@@ -113,13 +113,14 @@ public class AIWorldGUI extends Application {
         createWorld();
         
         primaryStage.show();
+        showWorld();
     }
 
 	private void toggleDelay() {
 		if (delay == 100) {
-			delay = 30;
+			delay = 10;
 		}
-		else if (delay == 30) {
+		else if (delay == 10) {
 			delay = 1;
 		}
 		else {
@@ -131,7 +132,7 @@ public class AIWorldGUI extends Application {
 		if (delay == 100) {
 			return "slow";
 		}
-		else if (delay == 30) {
+		else if (delay == 10) {
 			return "medium";
 		}
 		else {
