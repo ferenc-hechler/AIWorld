@@ -36,6 +36,8 @@ Other resources like computation time during a tick() must also be taken into ac
 
 Currently there is not much implemented, just a small world with five moving and five spinning "things".   
 
+![AI-World GUI](https://raw.githubusercontent.com/ferenc-hechler/AIWorld/master/AIWorldDoc/ai_world_gui.gif)
+
 Each thing has a position and a direction into which it "looks", it can move around and turn its direction. 
 
 All things in the World act synchronously during a tick().
@@ -48,6 +50,7 @@ Slower AI programs have less ticks() in the same time, then faster AI programs.
 ## Files
 
 *AIWorldJava* contains the java sources for AI-World.
+
 *AIWorldDoc* contains additional documentation, ideas, ... about what AI-World might be.
 
 

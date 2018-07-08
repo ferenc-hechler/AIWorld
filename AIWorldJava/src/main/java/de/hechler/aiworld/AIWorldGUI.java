@@ -47,7 +47,7 @@ public class AIWorldGUI extends Application {
     public void start(Stage primaryStage) {
         primaryStage.setTitle("AI-World");
         Group root = new Group();
-        canvasOverview = new Canvas(WORLD_SIZE, WORLD_SIZE);
+        canvasOverview = new Canvas(WORLD_SIZE+2, WORLD_SIZE+2);
 
         HBox buttonsPane = new HBox();
 
@@ -163,20 +163,24 @@ public class AIWorldGUI extends Application {
 
 	private void showWorld() {
 		GraphicsContext gc = canvasOverview.getGraphicsContext2D();
-		gc.clearRect(0, 0, WORLD_SIZE, WORLD_SIZE);
+		gc.clearRect(0, 0, WORLD_SIZE+2, WORLD_SIZE+2);
 
 		List<VisibleObject> visibleObjects = world.getVisibleObjects(0, 0, WORLD_SIZE, WORLD_SIZE);
 		for (VisibleObject visibleObj:visibleObjects) {
 			show(gc, visibleObj);
 		}
+		gc.setStroke(Color.BLACK);
+		gc.setLineWidth(1.0);
+		gc.strokeRect(0, 0, WORLD_SIZE+2, WORLD_SIZE+2);
+		
 	}
 
 
 
 	private void show(GraphicsContext gc, VisibleObject gObj) {
 		Color col = Color.rgb(gObj.getCol().getR(), gObj.getCol().getG(), gObj.getCol().getB(), gObj.getCol().getA() * DIV_255);
-		double x = HALF_WORLD_SIZE + gObj.getPos().getX();
-		double y = HALF_WORLD_SIZE + gObj.getPos().getY();
+		double x = HALF_WORLD_SIZE + 1 + gObj.getPos().getX();
+		double y = HALF_WORLD_SIZE + 1 + gObj.getPos().getY();
 		switch(gObj.getShape().getType()) {
 		case PIX: {
 			gc.getPixelWriter().setArgb((int) x, (int) y, gObj.getCol().getArgb());
